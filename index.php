@@ -3,9 +3,9 @@
 
     $task = new OrderCycle(5, 2, 2, date("Y-m-d"), 'create');
     echo '<pre>';
-    var_dump($task->getNextStatus('create'));
-    var_dump($task->getNextStatus('start'));
-    var_dump($task->getNextStatus('approve'));
-    var_dump($task->getNextStatus('cancel'));
-    var_dump($task->getNextStatus('degree'));
+    var_dump($task->getNextStatus($task::ACTIONS[0]));
+    var_dump($task->getNextStatus($task::ACTIONS[1]));
+    var_dump($task->getNextStatus($task::ACTIONS[2]));
+    var_dump($task->getNextStatus($task::ACTIONS[3]));
+    var_dump($task->getNextStatus($task::ACTIONS[4]));
     echo '</pre>';

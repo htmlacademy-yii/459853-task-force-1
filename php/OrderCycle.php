@@ -1,7 +1,7 @@
 <?php
     class OrderCycle {
         // Actions
-        private const ACTIONS = [
+        const ACTIONS = [
             'create',
             'start',
             'approve',
@@ -9,7 +9,7 @@
             'degree'
         ];
         // Statuses
-        private const STATUSES = [
+        const STATUSES = [
             'new',
             'started',
             'done',
@@ -17,7 +17,7 @@
             'failed'
         ];
         // ROLES
-        private const ROLES = [
+        const ROLES = [
             'customer',
             'employee'
         ];
@@ -45,24 +45,7 @@
         }
 
         public function getNextStatus($action) {
-            switch ($action) {
-                case self::ACTIONS[0]:
-                    return $this->current_status = self::STATUSES[0];
-                    break;
-                case self::ACTIONS[1]:
-                    return $this->current_status = self::STATUSES[1];
-                    break;
-                case self::ACTIONS[2]:
-                    return $this->current_status = self::STATUSES[2];
-                    break;
-                case self::ACTIONS[3]:
-                    return $this->current_status = self::STATUSES[3];
-                    break;
-                case self::ACTIONS[4]:
-                    return $this->current_status = self::STATUSES[4];
-                    break;
-                default:
-                     return $this->current_status = self::STATUSES[0];
-            }
+            // а если индексы будут разные?
+            return $this->current_status = self::STATUSES[array_search($action, self::ACTIONS)];
         }
     }
