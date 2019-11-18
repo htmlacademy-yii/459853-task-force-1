@@ -1,4 +1,6 @@
 <?php
+    namespace App\Controllers;
+
     class OrderCycle {
         // Actions
         const ACTIONS = [
