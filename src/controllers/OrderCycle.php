@@ -1,7 +1,8 @@
 <?php
     namespace App\Controllers;
 
-    class OrderCycle {
+    class OrderCycle
+    {
         // Actions
         const ACTIONS = [
             'create',
