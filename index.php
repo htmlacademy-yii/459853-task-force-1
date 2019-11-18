@@ -1,7 +1,10 @@
 <?php
-    require_once 'php/OrderCycle.php';
+    // Подключаем autoload
+    require_once 'vendor/autoload.php';
 
-    $task = new OrderCycle(5, 2, 2, date("Y-m-d"), 'create');
+    use App\Controllers\OrderCycle;
+
+    $task = new OrderCycle(5, 2, 2, date('Y-m-d'), 'create');
     echo '<pre>';
     var_dump($task->getNextStatus($task::ACTIONS[0]));
     var_dump($task->getNextStatus($task::ACTIONS[1]));
