@@ -1,11 +1,12 @@
 <?php
-    namespace App\Controllers\Action;
 
-    abstract class Action
-    {
-        abstract static function getName($name);
+namespace App\Controllers\Action;
 
-        abstract static function getCode();
+abstract class Action
+{
+    abstract static function getName($name);
 
-        abstract static function checkUserRole();
-    }
+    abstract static function getCode();
+
+    abstract static function checkUserRole();
+}

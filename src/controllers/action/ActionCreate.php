@@ -1,11 +1,21 @@
 <?php
-    namespace  App\Controllers\Action;
 
-    use  App\Controllers\Action;
+namespace App\Controllers\Action;
 
-    class ActionCreate extends Action
+use  App\Controllers\Action;
+
+class ActionCreate extends Action
+{
+    static function getName($name)
     {
-        static function getName($name) {
-            return $this->name;
-        }
+//        return $this->name;
     }
+
+    static function  getCode() {
+
+    }
+
+    static function checkUserRole() {
+
+    }
+}
