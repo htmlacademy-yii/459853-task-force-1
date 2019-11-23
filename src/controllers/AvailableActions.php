@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-class OrderCycle
+class AvailableActions
 {
     // Actions
     const ACTIONS = [
@@ -21,10 +21,8 @@ class OrderCycle
         'failed'
     ];
     // ROLES
-    const ROLES = [
-        'customer',
-        'employee'
-    ];
+    const ROLE_CUSTOMER = 'customer';
+    const ROLE_EMPLOYEE = 'employee';
 
     private $task_id = 0;
     private $employee_id;
@@ -41,6 +39,7 @@ class OrderCycle
         $this->current_status = $current_status;
     }
 
+    // static
     public function getStatuses()
     {
         return self::STATUSES;
