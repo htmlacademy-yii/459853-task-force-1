@@ -2,24 +2,26 @@
 
 namespace App\Controllers;
 
+use App\Controllers\Action\ActionApprove;
+use App\Controllers\Action\ActionCancel;
+use App\Controllers\Action\ActionCreate;
+use App\Controllers\Action\ActionFailed;
+use App\Controllers\Action\ActionStart;
+
 class AvailableActions
 {
-    // Actions
-    const ACTIONS = [
-        'ActionCreate',
-        'ActionStart',
-        'ActionApprove',
-        'ActionCancel',
-        'ActionFailed'
-    ];
-    // Statuses
-    const STATUSES = [
-        'new',
-        'started',
-        'done',
-        'canceled',
-        'failed'
-    ];
+    // ACTIONS
+    const ACTION_CREATE = ActionCreate::class;
+    const ACTION_START = ActionStart::class;
+    const ACTION_APPROVE = ActionApprove::class;
+    const ACTION_CANCEL = ActionCancel::class;
+    const ACTION_FAILED = ActionFailed::class;
+    // STATUSES
+    const STATUS_NEW = 'new';
+    const STATUS_STARTED = 'started';
+    const STATUS_DONE = 'done';
+    const STATUS_CANCEL = 'canceled';
+    const STATUS_FAIL = 'failed';
     // ROLES
     const ROLE_CUSTOMER = 'customer';
     const ROLE_EMPLOYEE = 'employee';
@@ -39,20 +41,69 @@ class AvailableActions
         $this->current_status = $current_status;
     }
 
-    // static
-    public function getStatuses()
+    public static function getStatuses()
     {
-        return self::STATUSES;
+        return [
+            self::STATUS_NEW,
+            self::STATUS_STARTED,
+            self::STATUS_DONE,
+            self::STATUS_CANCEL,
+            self::STATUS_FAIL
+        ];
     }
 
-    public function getActions()
+    public static function getActions()
     {
-        return self::ACTIONS;
+        return [
+            self::ACTION_CREATE,
+            self::ACTION_START,
+            self::ACTION_APPROVE,
+            self::ACTION_CANCEL,
+            self::ACTION_FAILED,
+        ];
     }
 
+    public function getEmploeeId()
+    {
+        return $this->employee_id;
+    }
+
+    public function getCustomerId()
+    {
+        return $this->customer_id;
+    }
+
+    public function getCurrentStatus()
+    {
+        return $this->current_status;
+    }
+
+    /**
+     * Возращает статус для переданного действия
+     * @param $action | передается в виде ActionCreate::class
+     * @return string
+     */
     public function getNextStatus($action)
     {
-        // а если индексы будут разные?
-        return $this->current_status = self::STATUSES[array_search($action, self::ACTIONS)];
+        $statuses = $this->getStatuses();
+        return $this->current_status = $statuses[array_search($action, $this->getActions())];
+    }
+
+    /**
+     * Возвращает список доступных действий для пользователя
+     * @param int $init_user | id user который передаем
+     * @return array | Список действий
+     */
+    public function getAvailableActions(int $init_user)
+    {
+        $actions = [];
+
+        foreach ($this->getActions() as $action) {
+            if ($action::checkPermissions($init_user, $this)) {
+                $actions[] = $action::getCode();
+            }
+        }
+
+        return $actions;
     }
 }

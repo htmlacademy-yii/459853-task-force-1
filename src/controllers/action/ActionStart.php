@@ -1,24 +1,25 @@
 <?php
 
-namespace App\Controllers\Action;
+
+namespace App\controllers\action;
 
 use App\Controllers\AvailableActions;
 
-class ActionCreate extends Action
+class ActionStart extends Action
 {
     public static function getName()
     {
-        return 'Создать';
+        return 'Начать';
     }
 
     public static function getCode()
     {
-        return 'create';
+        return 'started';
     }
 
     // check permissions
     public static function checkPermissions(int $init_user, AvailableActions $availableActions)
     {
-        return $init_user !== $availableActions->getEmploeeId();
+        return $init_user === $availableActions->getEmploeeId();
     }
 }

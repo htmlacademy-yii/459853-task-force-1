@@ -1,19 +1,20 @@
 <?php
 
+
 namespace App\Controllers\Action;
 
 use App\Controllers\AvailableActions;
 
-class ActionCreate extends Action
+class ActionApprove extends Action
 {
     public static function getName()
     {
-        return 'Создать';
+        return 'Принято';
     }
 
     public static function getCode()
     {
-        return 'create';
+        return 'approve';
     }
 
     // check permissions

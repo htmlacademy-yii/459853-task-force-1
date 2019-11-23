@@ -4,21 +4,21 @@ namespace App\Controllers\Action;
 
 use App\Controllers\AvailableActions;
 
-class ActionCreate extends Action
+class ActionCancel extends Action
 {
     public static function getName()
     {
-        return 'Создать';
+        return 'Отказаться';
     }
 
     public static function getCode()
     {
-        return 'create';
+        return 'cancel';
     }
 
     // check permissions
     public static function checkPermissions(int $init_user, AvailableActions $availableActions)
     {
-        return $init_user !== $availableActions->getEmploeeId();
+        return $init_user === $availableActions->getEmploeeId();
     }
 }

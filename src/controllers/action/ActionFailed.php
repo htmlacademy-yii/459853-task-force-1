@@ -4,16 +4,16 @@ namespace App\Controllers\Action;
 
 use App\Controllers\AvailableActions;
 
-class ActionCreate extends Action
+class ActionFailed extends Action
 {
     public static function getName()
     {
-        return 'Создать';
+        return 'Провалено';
     }
 
     public static function getCode()
     {
-        return 'create';
+        return 'failed';
     }
 
     // check permissions
