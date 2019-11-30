@@ -10,12 +10,6 @@ use App\Controllers\Action\ActionStart;
 
 class AvailableActions
 {
-    // ACTIONS
-    const ACTION_CREATE = ActionCreate::class;
-    const ACTION_START = ActionStart::class;
-    const ACTION_APPROVE = ActionApprove::class;
-    const ACTION_CANCEL = ActionCancel::class;
-    const ACTION_FAILED = ActionFailed::class;
     // STATUSES
     const STATUS_NEW = 'new';
     const STATUS_STARTED = 'started';
@@ -55,11 +49,11 @@ class AvailableActions
     public static function getActions()
     {
         return [
-            self::ACTION_CREATE,
-            self::ACTION_START,
-            self::ACTION_APPROVE,
-            self::ACTION_CANCEL,
-            self::ACTION_FAILED,
+            ActionCreate::class,
+            ActionStart::class,
+            ActionApprove::class,
+            ActionCancel::class,
+            ActionFailed::class
         ];
     }
 

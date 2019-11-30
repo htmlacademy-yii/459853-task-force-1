@@ -10,7 +10,7 @@ $user_employee = 5;
 $user_customer = 2;
 
 // Нвоый экземпляр класса
-$task = new AvailableActions($task_id, $user_employee, $user_customer, date('Y-m-d'), AvailableActions::ACTION_CREATE);
+$task = new AvailableActions($task_id, $user_employee, $user_customer, date('Y-m-d'), AvailableActions::getActions()[0]);
 
 // Проверка первого задания, возвращаем статусы
 //echo '<pre>';
