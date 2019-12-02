@@ -14,12 +14,12 @@ class ActionStart extends Action
 
     public static function getCode()
     {
-        return 'started';
+        return 'act_started';
     }
 
     // check permissions
     public static function checkPermissions(int $init_user, AvailableActions $availableActions)
     {
-        return $init_user === $availableActions->getEmploeeId();
+        return $init_user === $availableActions->getEmploeeId() && $availableActions->getCurrentStatus() === AvailableActions::STATUS_NEW;
     }
 }

@@ -9,17 +9,17 @@ class ActionApprove extends Action
 {
     public static function getName()
     {
-        return 'Принято';
+        return 'Принять (Завершить)';
     }
 
     public static function getCode()
     {
-        return 'approve';
+        return 'act_approve';
     }
 
     // check permissions
     public static function checkPermissions(int $init_user, AvailableActions $availableActions)
     {
-        return $init_user !== $availableActions->getEmploeeId();
+        return $init_user !== $availableActions->getEmploeeId() && $availableActions->getCurrentStatus() === AvailableActions::STATUS_STARTED;
     }
 }

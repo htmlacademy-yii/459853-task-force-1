@@ -4,9 +4,9 @@ namespace App\Controllers;
 
 use App\Controllers\Action\ActionApprove;
 use App\Controllers\Action\ActionCancel;
-use App\Controllers\Action\ActionCreate;
 use App\Controllers\Action\ActionFailed;
 use App\Controllers\Action\ActionStart;
+use App\Controllers\Action\ActionRefuse;
 
 class AvailableActions
 {
@@ -16,6 +16,7 @@ class AvailableActions
     const STATUS_DONE = 'done';
     const STATUS_CANCEL = 'canceled';
     const STATUS_FAIL = 'failed';
+    const STATUS_REFUSE = 'refuse';
     // ROLES
     const ROLE_CUSTOMER = 'customer';
     const ROLE_EMPLOYEE = 'employee';
@@ -42,18 +43,20 @@ class AvailableActions
             self::STATUS_STARTED,
             self::STATUS_DONE,
             self::STATUS_CANCEL,
-            self::STATUS_FAIL
+            self::STATUS_FAIL,
+            self::STATUS_REFUSE
         ];
     }
 
     public static function getActions()
     {
         return [
-            ActionCreate::class,
+//            ActionCreate::class,
             ActionStart::class,
             ActionApprove::class,
             ActionCancel::class,
-            ActionFailed::class
+            ActionFailed::class,
+            ActionRefuse::class
         ];
     }
 
@@ -90,8 +93,8 @@ class AvailableActions
      */
     public function getAvailableActions(int $init_user)
     {
-        $actions = [];
 
+        $actions = [];
         foreach ($this->getActions() as $action) {
             if ($action::checkPermissions($init_user, $this)) {
                 $actions[] = $action::getCode();
