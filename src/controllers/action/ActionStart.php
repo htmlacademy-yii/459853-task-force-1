@@ -20,6 +20,6 @@ class ActionStart extends Action
     // check permissions
     public static function checkPermissions(int $init_user, AvailableActions $availableActions)
     {
-        return $init_user === $availableActions->getEmploeeId() && $availableActions->getCurrentStatus() === AvailableActions::STATUS_NEW;
+        return $init_user === $availableActions->getEmployeeId() && $availableActions->getCurrentStatus() === AvailableActions::STATUS_NEW;
     }
 }
