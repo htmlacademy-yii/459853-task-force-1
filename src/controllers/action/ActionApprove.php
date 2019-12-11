@@ -17,9 +17,8 @@ class ActionApprove extends Action
         return 'act_approve';
     }
 
-    // check permissions
-    public static function checkPermissions(int $init_user, AvailableActions $availableActions)
+    public static function checkPermissions(int $initUser, AvailableActions $availableActions):bool
     {
-        return $init_user !== $availableActions->getEmployeeId() && $availableActions->getCurrentStatus() === AvailableActions::STATUS_STARTED;
+        return $initUser !== $availableActions->getEmployeeId() && $availableActions->getCurrentStatus() === AvailableActions::STATUS_STARTED;
     }
 }

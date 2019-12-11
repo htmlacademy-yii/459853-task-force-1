@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\controllers\action;
+namespace App\Controllers\Action;
 
 use App\Controllers\AvailableActions;
 
@@ -17,9 +17,8 @@ class ActionStart extends Action
         return 'act_started';
     }
 
-    // check permissions
-    public static function checkPermissions(int $init_user, AvailableActions $availableActions)
+    public static function checkPermissions(int $initUser, AvailableActions $availableActions):bool
     {
-        return $init_user === $availableActions->getEmployeeId() && $availableActions->getCurrentStatus() === AvailableActions::STATUS_NEW;
+        return $initUser === $availableActions->getEmployeeId() && $availableActions->getCurrentStatus() === AvailableActions::STATUS_NEW;
     }
 }

@@ -10,5 +10,5 @@ abstract class Action
 
     abstract static function getCode();
 
-    abstract static function checkPermissions(int $init_user, AvailableActions $availableActions);
+    abstract static function checkPermissions(int $initUser, AvailableActions $availableActions);
 }

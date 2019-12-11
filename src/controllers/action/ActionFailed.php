@@ -16,9 +16,8 @@ class ActionFailed extends Action
         return 'act_failed';
     }
 
-    // check permissions
-    public static function checkPermissions(int $init_user, AvailableActions $availableActions)
+    public static function checkPermissions(int $initUser, AvailableActions $availableActions):bool
     {
-        return $init_user === $availableActions->getCustomerId() && $availableActions->getCurrentStatus() === AvailableActions::STATUS_STARTED;
+        return $initUser === $availableActions->getCustomerId() && $availableActions->getCurrentStatus() === AvailableActions::STATUS_STARTED;
     }
 }
