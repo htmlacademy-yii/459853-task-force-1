@@ -16,9 +16,8 @@ class ActionCancel extends Action
         return 'act_cancel';
     }
 
-    // check permissions
-    public static function checkPermissions(int $init_user, AvailableActions $availableActions)
+    public static function checkPermissions(int $initUser, AvailableActions $availableActions):bool
     {
-        return $init_user === $availableActions->getCustomerId() && $availableActions->getCurrentStatus() === AvailableActions::STATUS_NEW;
+        return $initUser === $availableActions->getCustomerId() && $availableActions->getCurrentStatus() === AvailableActions::STATUS_NEW;
     }
 }
