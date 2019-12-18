@@ -8,6 +8,8 @@ use App\Controllers\Action\ActionFailed;
 use App\Controllers\Action\ActionStart;
 use App\Controllers\Action\ActionRefuse;
 
+use App\Controllers\Exception;
+
 class AvailableActions
 {
     // STATUSES
@@ -82,7 +84,13 @@ class AvailableActions
     public function getNextStatus($action)
     {
         $statuses = $this->getStatuses();
-        return $this->current_status = $statuses[array_search($action, $this->getActions())];
+        $find_item = array_search($action, $this->getActions());
+
+        if (!$find_item) {
+            throw new ActionException('Статус для действия не найден');
+        }
+
+        return $this->current_status = $statuses[$find_item];
     }
 
     /**
@@ -92,9 +100,13 @@ class AvailableActions
      */
     public function getAvailableActions(int $init_user)
     {
-
         $actions = [];
         foreach ($this->getActions() as $action) {
+
+            if (!$init_user) {
+                throw new ActionException('Трабл');
+            }
+
             if ($action::checkPermissions($init_user, $this)) {
                 $actions[] = $action::getCode();
             }
