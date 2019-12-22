@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 
 namespace App\Controllers\Action;
 
@@ -7,12 +7,12 @@ use App\Controllers\AvailableActions;
 
 class ActionStart extends Action
 {
-    public static function getName()
+    public static function getName():string
     {
         return 'Начать';
     }
 
-    public static function getCode()
+    public static function getCode():string
     {
         return 'act_started';
     }
