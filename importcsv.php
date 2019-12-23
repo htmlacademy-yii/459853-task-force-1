@@ -5,13 +5,16 @@ require_once 'vendor/autoload.php';
 use \App\Controllers\Exception\SourceFileException;
 use \App\Controllers\Exception\FileFormatException;
 use App\Controllers\Utils\CsvParser;
-
-$import = new CsvParser('./data/categories.csv');
+use App\Controllers\Utils\SqlConvert;
 
 
 try {
+    $import = new CsvParser('./data/categories.csv');
     $import->parse();
-    dump($import->getData());
+
+    $converter = new SqlConvert($import->getData());
+    $converter->convert();
+
 } catch(SourceFileException $error) {
     echo 'Ошибка: ' . $error->getMessage();
 } catch(FileFormatException $error) {
