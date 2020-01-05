@@ -34,7 +34,7 @@ class CsvParser
         }
 
         // TODO При текущей првоерке он всегда выбрасывает 1 ое исключение
-        if (!$this->file->getExtension() === self::FILE_EXT) {
+        if (!$this-> ->getExtension() === self::FILE_EXT) {
             throw new FileFormatException('Неверный формат файла');
         }
 

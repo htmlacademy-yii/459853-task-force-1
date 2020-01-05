@@ -13,8 +13,9 @@ class SqlConvert
         $this->fileArray = $data;
     }
 
-    public function convert() {
-        foreach($this->fileArray as $item) {
+    public function convert()
+    {
+        foreach ($this->fileArray as $item) {
             var_dump($item);
         }
     }
