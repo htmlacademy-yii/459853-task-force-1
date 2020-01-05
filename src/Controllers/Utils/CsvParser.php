@@ -1,10 +1,10 @@
 <?php
-
+declare(strict_types=1);
 
 namespace App\Controllers\Utils;
 
-use App\Controllers\Exception\SourceFileException;
 use App\Controllers\Exception\FileFormatException;
+use App\Controllers\Exception\SourceFileException;
 use SplFileObject;
 
 class CsvParser
@@ -15,12 +15,17 @@ class CsvParser
 
     private const FILE_EXT = 'csv';
 
-    public function __construct($file)
+    public function __construct(string $file)
     {
         $this->pathToFile = $file;
     }
 
-    public function parse()
+    /**
+     * Parse csv file
+     * @throws FileFormatException
+     * @throws SourceFileException
+     */
+    public function parse(): void
     {
 
         if (!file_exists($this->pathToFile)) {
@@ -33,31 +38,60 @@ class CsvParser
             throw new FileFormatException('Файл нельзя прочитать');
         }
 
-        // TODO При текущей првоерке он всегда выбрасывает 1 ое исключение
-        if (!$this-> ->getExtension() === self::FILE_EXT) {
+        if (!$this->file->getExtension() === self::FILE_EXT) {
             throw new FileFormatException('Неверный формат файла');
         }
 
-        $this->file->setFlags(SplFileObject::READ_CSV | SplFileObject::SKIP_EMPTY | SplFileObject::READ_AHEAD | SplFileObject::DROP_NEW_LINE);
+        $this->file->setFlags(
+            SplFileObject::READ_CSV |
+            SplFileObject::SKIP_EMPTY |
+            SplFileObject::READ_AHEAD);
+
 
         foreach ($this->getNextLine() as $line) {
-            $this->result[] = $line;
+
+            if (!is_null($line)) {
+                $this->result[] = $line;
+            }
         }
 
     }
 
-    public function getData()
+    /**
+     * data from csv
+     * @return array
+     * @throws FileFormatException
+     * @throws SourceFileException
+     */
+    public function getData(): array
     {
-        return $this->result;
+        if (empty($this->result)) {
+            $this->parse();
+        }
+
+        return array_slice($this->result, 1);
     }
 
-    private function getHeaderData()
+    public function getHeaderData(): array
     {
         $this->file->rewind();
         return $this->file->current();
     }
 
-    private function getNextLine()
+    /**
+     * Название таблицы
+     * @return string
+     */
+    public function getTableName(): string
+    {
+        return basename($this->pathToFile, '.csv');
+    }
+
+    /**
+     * Get each row form csv
+     * @return Generator|null
+     */
+    private function getNextLine(): ?\Generator
     {
         $result = null;
 
