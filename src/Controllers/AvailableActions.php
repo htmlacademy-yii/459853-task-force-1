@@ -1,12 +1,13 @@
 <?php
-
+declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Controllers\Action\ActionApprove;
 use App\Controllers\Action\ActionCancel;
 use App\Controllers\Action\ActionFailed;
-use App\Controllers\Action\ActionStart;
 use App\Controllers\Action\ActionRefuse;
+use App\Controllers\Action\ActionStart;
+use App\Controllers\Exception\ActionException;
 
 class AvailableActions
 {
@@ -27,16 +28,20 @@ class AvailableActions
     private $end_date;
     private $current_status;
 
-    public function __construct($task_id, $employee_id, $customer_id, $end_date, $current_status)
+    public function __construct(int $task_id, int $employee_id, int $customer_id, string $end_date, string $current_status)
     {
         $this->task_id = $task_id;
         $this->employee_id = $employee_id;
         $this->customer_id = $customer_id;
         $this->end_date = $end_date;
         $this->current_status = $current_status;
+
+        if(!in_array($current_status, $this->getStatuses())) {
+            throw new ActionException('Конструктор, статуса не существует');
+        }
     }
 
-    public static function getStatuses()
+    public static function getStatuses():array
     {
         return [
             self::STATUS_NEW,
@@ -48,7 +53,7 @@ class AvailableActions
         ];
     }
 
-    public static function getActions()
+    public static function getActions():array
     {
         return [
             ActionStart::class,
@@ -59,17 +64,17 @@ class AvailableActions
         ];
     }
 
-    public function getEmployeeId()
+    public function getEmployeeId():int
     {
         return $this->employee_id;
     }
 
-    public function getCustomerId()
+    public function getCustomerId():int
     {
         return $this->customer_id;
     }
 
-    public function getCurrentStatus()
+    public function getCurrentStatus():string
     {
         return $this->current_status;
     }
@@ -78,23 +83,40 @@ class AvailableActions
      * Возращает статус для переданного действия
      * @param $action | передается в виде ActionCreate::class
      * @return string
+     * @throws ActionException
      */
-    public function getNextStatus($action)
+    public function getNextStatus(string $action):string
     {
         $statuses = $this->getStatuses();
-        return $this->current_status = $statuses[array_search($action, $this->getActions())];
+        $find_item = array_search($action, $this->getActions());
+
+        if (!in_array($action, $this->getActions())) {
+            throw new ActionException('Статус для действия не найден');
+        }
+
+        return $this->current_status = $statuses[$find_item];
     }
 
     /**
      * Возвращает список доступных действий для пользователя
      * @param int $init_user | id user который передаем
-     * @return array | Список действий
+     * @return array | список действий
+     * @throws ActionException
      */
-    public function getAvailableActions(int $init_user)
+    public function getAvailableActions(int $init_user):array
     {
+
+        if($this->getCustomerId() !== $init_user && $this->getEmployeeId() !== $init_user) {
+            throw new ActionException('Роль пользователя не определена');
+        }
 
         $actions = [];
         foreach ($this->getActions() as $action) {
+
+            if (!$init_user) {
+                throw new ActionException('Трабл');
+            }
+
             if ($action::checkPermissions($init_user, $this)) {
                 $actions[] = $action::getCode();
             }

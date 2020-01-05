@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Controllers\Action;
 
@@ -6,12 +7,12 @@ use App\Controllers\AvailableActions;
 
 class ActionCancel extends Action
 {
-    public static function getName()
+    public static function getName():string
     {
         return 'Отменить';
     }
 
-    public static function getCode()
+    public static function getCode():string
     {
         return 'act_cancel';
     }
