@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace App\controllers\Utils;
+namespace App\Utils;
 
-use App\Controllers\Exception\SourceFileException;
+use App\Exception\SourceFileException;
 use SplFileInfo;
 use SplFileObject;
 

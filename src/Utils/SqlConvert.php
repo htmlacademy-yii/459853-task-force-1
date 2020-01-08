@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Controllers\Utils;
+namespace App\Utils;
 
 
 class SqlConvert
@@ -23,28 +23,15 @@ class SqlConvert
      */
     public function createStatement(): string
     {
+        $values = [];
         foreach ($this->fileArray as $valuesArray) {
-            $result[] = implode(',', array_map(
-                    function ($value) {
-                        return "'{$value}'";
-                    },
-                    $valuesArray)
-            );
-
-            $values = array_map(function ($item) {
-                return "({$item})";
-            }, $result);
+            $values[] = "('" . implode("', '", $valuesArray) . "')";
         }
 
-
-        $columns = implode(',', array_map(
-            function ($item) {
-                return "`{$item}`";
-            }, $this->columns));
+        $columns = "(`" . implode("`, `", $this->columns) . "`)";
 
         $valuesStatement = implode(',' . PHP_EOL, $values);
 
-
-        return "INSERT INTO {$this->tableName} ({$columns})\nVALUES\n{$valuesStatement}" . PHP_EOL;
+        return "INSERT INTO `$this->tableName` $columns\nVALUES\n $valuesStatement;" . PHP_EOL;
     }
 }

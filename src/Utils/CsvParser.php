@@ -1,19 +1,20 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Controllers\Utils;
+namespace App\Utils;
 
-use App\Controllers\Exception\FileFormatException;
-use App\Controllers\Exception\SourceFileException;
+use App\Exception\FileFormatException;
+use App\Exception\SourceFileException;
 use SplFileObject;
 
 class CsvParser
 {
+    private const FILE_EXT = 'csv';
+
     private $pathToFile;
     private $file;
     private $result = [];
-
-    private const FILE_EXT = 'csv';
+    private $headerData;
 
     public function __construct(string $file)
     {
@@ -25,7 +26,7 @@ class CsvParser
      * @throws FileFormatException
      * @throws SourceFileException
      */
-    public function parse(): void
+    private function parse(): void
     {
 
         if (!file_exists($this->pathToFile)) {
@@ -48,11 +49,16 @@ class CsvParser
             SplFileObject::READ_AHEAD);
 
 
-        foreach ($this->getNextLine() as $line) {
+        foreach ($this->getNextLine() as $index => $line) {
 
-            if (!is_null($line)) {
-                $this->result[] = $line;
+            if ($index === 0) {
+                $this->headerData = $line;
+            } else {
+                if (!is_null($line)) {
+                    $this->result[] = $line;
+                }
             }
+
         }
 
     }
@@ -69,13 +75,16 @@ class CsvParser
             $this->parse();
         }
 
-        return array_slice($this->result, 1);
+        return $this->result;
     }
 
     public function getHeaderData(): array
     {
-        $this->file->rewind();
-        return $this->file->current();
+        if (empty($this->headerData)) {
+            $this->parse();
+        }
+
+        return $this->headerData;
     }
 
     /**
@@ -93,13 +102,10 @@ class CsvParser
      */
     private function getNextLine(): ?\Generator
     {
-        $result = null;
-
         while (!$this->file->eof()) {
             yield $this->file->fgetcsv();
         }
 
-        return $result;
     }
 
 }

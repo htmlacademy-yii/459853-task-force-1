@@ -3,27 +3,25 @@ declare(strict_types=1);
 
 require_once 'vendor/autoload.php';
 
-use App\Controllers\Exception\FileFormatException;
-use App\Controllers\Exception\SourceFileException;
-use App\Controllers\Utils\CsvParser;
-use App\Controllers\Utils\SqlConvert;
-use App\Controllers\Utils\SqlWriter;
+use App\Exception\FileFormatException;
+use App\Exception\SourceFileException;
+use App\Utils\CsvParser;
+use App\Utils\SqlConvert;
+use App\Utils\SqlWriter;
 
 $rootCsvPath = './data/';
 $sqlPath = './data/sql/';
 $filePath = './data/categories.csv'; // для теста
 
+$files = [];
 
-$files = array_filter(scandir($rootCsvPath), function ($item) {
-    $info = new SplFileInfo($item);
-    if ($info->getExtension() === 'csv') {
-        return $item;
-    }
-});
+foreach(glob($rootCsvPath.'*.csv') as $file) {
+    $files[] = $file;
+}
 
 try {
     foreach ($files as $file) {
-        $import = new CsvParser($rootCsvPath . $file);
+        $import = new CsvParser($file);
         $converter = new SqlConvert($import->getTableName(), $import->getData(), $import->getHeaderData());
         $createFile = new SqlWriter($import->getTableName(), $sqlPath);
         $createFile->write($converter->createStatement());

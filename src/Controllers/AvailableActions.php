@@ -7,7 +7,7 @@ use App\Controllers\Action\ActionCancel;
 use App\Controllers\Action\ActionFailed;
 use App\Controllers\Action\ActionRefuse;
 use App\Controllers\Action\ActionStart;
-use App\Controllers\Exception\ActionException;
+use App\Exception\ActionException;
 
 class AvailableActions
 {
