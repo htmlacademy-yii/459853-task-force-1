@@ -3,8 +3,9 @@
 
 namespace App\Exception;
 
+use Exception;
 
-class ActionException extends \Exception
+class ActionException extends Exception
 {
 
 }
