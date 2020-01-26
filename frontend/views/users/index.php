@@ -41,8 +41,6 @@ $this->title = 'Пользователи';
                 <span class="new-task__time">Был на сайте 25 минут назад</span>
             </div>
             <div class="link-specialization user__search-link--bottom">
-
-                <?print_r($user)?>
                 <a href="#" class="link-regular">Ремонт</a>
                 <a href="#" class="link-regular">Курьер</a>
                 <a href="#" class="link-regular">Оператор ПК</a>
