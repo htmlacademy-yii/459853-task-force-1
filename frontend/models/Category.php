@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace frontend\models;
 
 use Yii;
 
@@ -10,6 +10,7 @@ use Yii;
  * @property int $id
  * @property string $name
  * @property string $code
+ * @property string|null $created_date
  *
  * @property Tasks[] $tasks
  */
@@ -30,6 +31,7 @@ class Category extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'code'], 'required'],
+            [['created_date'], 'safe'],
             [['name', 'code'], 'string', 'max' => 128],
         ];
     }
@@ -43,6 +45,7 @@ class Category extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
             'code' => 'Code',
+            'created_date' => 'Created Date',
         ];
     }
 

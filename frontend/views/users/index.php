@@ -31,18 +31,18 @@ $this->title = 'Пользователи';
                     <span>6 отзывов</span>
                 </div>
                 <div class="feedback-card__top--name user__search-card">
-                    <p class="link-name"><a href="#" class="link-regular"><?= Html::encode($user->name); ?></a></p>
+                    <p class="link-name"><a href="#" class="link-regular"><?= Html::encode($user['name']); ?> <?= Html::encode($user['lastname']); ?></a></p>
                     <span></span><span></span><span></span><span></span><span class="star-disabled"></span>
                     <b>4.25</b>
                     <p class="user__search-content">
-                        Сложно сказать, почему элементы политического процесса лишь
-                        добавляют фракционных разногласий и рассмотрены исключительно
-                        в разрезе маркетинговых и финансовых предпосылок.
+                        <?= Html::encode($user['description']); ?>
                     </p>
                 </div>
                 <span class="new-task__time">Был на сайте 25 минут назад</span>
             </div>
             <div class="link-specialization user__search-link--bottom">
+
+                <?print_r($user)?>
                 <a href="#" class="link-regular">Ремонт</a>
                 <a href="#" class="link-regular">Курьер</a>
                 <a href="#" class="link-regular">Оператор ПК</a>

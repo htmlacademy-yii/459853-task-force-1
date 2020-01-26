@@ -28,7 +28,7 @@ $this->title = 'Задания';
                 </p>
                 <b class="new-task__price new-task__price--translation"><?= $task->price; ?><b> ₽</b></b>
                 <p class="new-task__place"><?= Html::encode($task->location ?? 'Уточняется'); ?></p>
-                <span class="new-task__time"> <?= $task->created_date; ?></span>
+                <span class="new-task__time"> <?= $task->created_at; ?></span>
             </div>
 
         <?php endforeach; ?>
