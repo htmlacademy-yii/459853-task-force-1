@@ -3,22 +3,38 @@
 
 namespace frontend\controllers;
 
-use frontend\models\Users;
-use yii\web\Controller;
 use yii\db\Query;
+use yii\web\Controller;
 
 class UsersController extends Controller
 {
-    public function actionIndex() {
-        $query = new Query();
-        $query
-            ->select(['u.name', 'u.description', 'u.lastname'])
-            ->from('users u')
-            ->join('JOIN', 'category_to_user ctu', 'u.id = ctu.user_id')
+    public function actionIndex()
+    {
+        $users_ids = new Query();
+        $users_ids
+            ->select('ctu.user_id')
+            ->from('category_to_user ctu')
             ->distinct();
 
-        $users = $query->all();
+//        $comments = new Query();
+//        $comments
+//            ->select(['c.user_employee_id', 'COUNT(*) AS total_comments'])
+//            ->from('comments c')
+//            ->where(['user_employee_id' => $users_ids])
+//            ->groupBy('c.user_employee_id');
+//
+//        $comments_query = $comments->all();
 
-        return $this->render('index', ['users' => $users]);
+        $users_query = new Query();
+        $users_query
+            ->select(['u.*'])
+            ->from('users u')
+            ->where(['u.id' => $users_ids])
+            ->groupBy('u.id');
+
+        $users = $users_query->all();
+
+
+        return $this->render('index', ['users' => $users, 'comments' => $comments_query]);
     }
 }
