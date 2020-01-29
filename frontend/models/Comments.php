@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace frontend\models;
 
 use Yii;
 
@@ -12,10 +12,10 @@ use Yii;
  * @property int $user_create_id
  * @property int $user_employee_id
  * @property string|null $description
- * @property int $rating
+ * @property float $rating
  *
- * @property Users $userEmployee
  * @property Users $userCreate
+ * @property Users $userEmployee
  * @property Tasks $task
  */
 class Comments extends \yii\db\ActiveRecord
@@ -35,10 +35,11 @@ class Comments extends \yii\db\ActiveRecord
     {
         return [
             [['task_id', 'user_create_id', 'user_employee_id', 'rating'], 'required'],
-            [['task_id', 'user_create_id', 'user_employee_id', 'rating'], 'integer'],
+            [['task_id', 'user_create_id', 'user_employee_id'], 'integer'],
             [['description'], 'string'],
-            [['user_employee_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_employee_id' => 'id']],
+            [['rating'], 'number'],
             [['user_create_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_create_id' => 'id']],
+            [['user_employee_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_employee_id' => 'id']],
             [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tasks::className(), 'targetAttribute' => ['task_id' => 'id']],
         ];
     }
@@ -61,17 +62,17 @@ class Comments extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUserEmployee()
+    public function getUserCreate()
     {
-        return $this->hasOne(Users::className(), ['id' => 'user_employee_id']);
+        return $this->hasOne(Users::className(), ['id' => 'user_create_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUserCreate()
+    public function getUserEmployee()
     {
-        return $this->hasOne(Users::className(), ['id' => 'user_create_id']);
+        return $this->hasOne(Users::className(), ['id' => 'user_employee_id']);
     }
 
     /**

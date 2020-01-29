@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace frontend\models;
 
 use Yii;
 
@@ -12,20 +12,20 @@ use Yii;
  * @property string $description
  * @property int $category_id
  * @property string|null $attachment
- * @property string $location
- * @property int $price
+ * @property string|null $location
+ * @property float $price
  * @property string $end_date
  * @property int $user_create_id
  * @property int|null $user_employee_id
  * @property int $status_id
- * @property string|null $created_date
+ * @property string|null $created_at
  *
  * @property Comments[] $comments
  * @property TaskResponse[] $taskResponses
- * @property Users $userEmployee
- * @property Users $userCreate
- * @property Category $category
  * @property Statuses $status
+ * @property Category $category
+ * @property Users $userCreate
+ * @property Users $userEmployee
  */
 class Tasks extends \yii\db\ActiveRecord
 {
@@ -43,16 +43,16 @@ class Tasks extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'description', 'category_id', 'location', 'price', 'end_date', 'user_create_id', 'status_id'], 'required'],
+            [['title', 'description', 'category_id', 'price', 'end_date', 'user_create_id', 'status_id'], 'required'],
             [['description'], 'string'],
-            [['category_id', 'price', 'user_create_id', 'user_employee_id', 'status_id'], 'integer'],
-            [['end_date', 'created_date'], 'safe'],
-            [['title', 'location'], 'string', 'max' => 128],
-            [['attachment'], 'string', 'max' => 255],
-            [['user_employee_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_employee_id' => 'id']],
-            [['user_create_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_create_id' => 'id']],
-            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
+            [['category_id', 'user_create_id', 'user_employee_id', 'status_id'], 'integer'],
+            [['price'], 'number'],
+            [['end_date', 'created_at'], 'safe'],
+            [['title', 'attachment', 'location'], 'string', 'max' => 255],
             [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => Statuses::className(), 'targetAttribute' => ['status_id' => 'id']],
+            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
+            [['user_create_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_create_id' => 'id']],
+            [['user_employee_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_employee_id' => 'id']],
         ];
     }
 
@@ -73,7 +73,7 @@ class Tasks extends \yii\db\ActiveRecord
             'user_create_id' => 'User Create ID',
             'user_employee_id' => 'User Employee ID',
             'status_id' => 'Status ID',
-            'created_date' => 'Created Date',
+            'created_at' => 'Created At',
         ];
     }
 
@@ -96,17 +96,9 @@ class Tasks extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUserEmployee()
+    public function getStatus()
     {
-        return $this->hasOne(Users::className(), ['id' => 'user_employee_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUserCreate()
-    {
-        return $this->hasOne(Users::className(), ['id' => 'user_create_id']);
+        return $this->hasOne(Statuses::className(), ['id' => 'status_id']);
     }
 
     /**
@@ -120,8 +112,16 @@ class Tasks extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getStatus()
+    public function getUserCreate()
     {
-        return $this->hasOne(Statuses::className(), ['id' => 'status_id']);
+        return $this->hasOne(Users::className(), ['id' => 'user_create_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserEmployee()
+    {
+        return $this->hasOne(Users::className(), ['id' => 'user_employee_id']);
     }
 }
