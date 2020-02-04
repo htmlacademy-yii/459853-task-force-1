@@ -35,6 +35,6 @@ class UsersController extends Controller
         $users = $users_query->all();
 
 
-        return $this->render('index', ['users' => $users, 'comments' => $comments_query]);
+        return $this->render('index', ['users' => $users]);
     }
 }
