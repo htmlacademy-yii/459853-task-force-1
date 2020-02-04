@@ -48,37 +48,16 @@ $this->title = 'Задания';
     </div>
 </section>
 <section class="search-task">
-
-    <?php
-    $arr = [
-        'Курьерские услуги',
-        'Грузоперевозки',
-        'Переводы',
-        'Строительство и ремонт',
-        'Выгул животных'
-    ];
-
-    $select = [
-        'response' => 'Без откликов',
-        'freelance' => 'Удаленная работа'
-    ];
-
-    $date = [
-        'day' => 'За день',
-        'week' => 'За неделю',
-        'month' => 'За месяц'
-    ];
-    ?>
-
     <div class="search-task__wrapper">
         <?php $filter = ActiveForm::begin([
+            'method' => 'get',
             'options' => ['class' => 'search-task__form']
         ]); ?>
 
         <fieldset class="search-task__categories">
             <legend>Категории</legend>
-            <?= Html::activeCheckboxList($tasksForm, 'categories', $arr, ['item' => function ($index, $label, $name, $checked, $value) {
-                return TemplateForm::getTemplateCheckbox($label, $value, $name);
+            <?= Html::activeCheckboxList($tasksForm, 'categories', $categories, ['item' => function ($index, $label, $name, $checked, $value) {
+                return TemplateForm::getTemplateCheckbox($label, $value, $name, $checked);
             }]); ?>
         </fieldset>
 
@@ -86,7 +65,7 @@ $this->title = 'Задания';
             <legend>Дополнительно</legend>
 
             <?= Html::activeCheckboxList($tasksForm, 'additional', $select, ['item' => function ($index, $label, $name, $checked, $value) {
-                return TemplateForm::getTemplateCheckbox($label, $value, $name);
+                return TemplateForm::getTemplateCheckbox($label, $value, $name, $checked);
             }]); ?>
         </fieldset>
 
