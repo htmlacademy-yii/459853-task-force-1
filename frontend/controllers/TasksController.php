@@ -10,46 +10,49 @@ use yii\web\Controller;
 
 class TasksController extends Controller
 {
-    private $select = [
-        'response' => 'Без откликов',
-        'freelance' => 'Удаленная работа'
-    ];
-
-    private $date = [
-        'day' => 'За день',
-        'week' => 'За неделю',
-        'month' => 'За месяц'
-    ];
 
     public function actionIndex()
     {
         $query = Tasks::find()->with('category')->where(['status_id' => 1]);
         $tasksForm = new TasksForm();
 
-        if (Yii::$app->request->getIsGet()) {
-            $tasksForm->load(Yii::$app->request->get());
+        if (Yii::$app->request->getIsPost()) {
+            $formData = Yii::$app->request->post();
+            if ($tasksForm->load($formData) && $tasksForm->validate()) {
 
-            foreach ($tasksForm as $key => $data) {
-                if ($data) {
-
-                    switch ($key) {
-                        case 'categories':
-                            $query->andWhere(['category_id' => $data]);
-                            break;
-                        case 'additional':
-                            if ($data === 'response') {
-                                $query->andWhere(['user_employee_id' => NULL]);
-                            } else if ($data === 'freelance') {
-                                $query->andWhere(['location' => NULL]);
-                            }
-                            break;
-                        case 'search':
-                            $query->andWhere(['LIKE', 'title', $data]);
-                            break;
-
-                    }
+                if ($tasksForm->replies) {
+                    $query->leftJoin('comments', 'comments.task_id = tasks.id');
+                    $query->andWhere(['or',
+                        ['comments.task_id' => null],
+                        ['tasks.id' => null]
+                    ]);
                 }
 
+                if ($tasksForm->categories) {
+                    $categories = ['or'];
+                    foreach ($tasksForm->categories as $category) {
+                        $categories[] = [
+                            'tasks.category_id' => $category + 1
+                        ];
+                    }
+                    $query->andWhere($categories);
+                }
+
+                if ($tasksForm->location) {
+                    $query->andWhere(['tasks.location' => null]);
+                }
+
+                if ($tasksForm->period === 'day') {
+                    $query->andWhere(['>', 'tasks.created_at', date("Y-m-d H:i:s", strtotime("- 1 day"))]);
+                } elseif ($tasksForm->period === 'week') {
+                    $query->andWhere(['>', 'tasks.created_at', date("Y-m-d H:i:s", strtotime("- 1 week"))]);
+                } elseif ($tasksForm->period === 'month') {
+                    $query->andWhere(['>', 'tasks.created_at', date("Y-m-d H:i:s", strtotime("- 1 month"))]);
+                }
+
+                if (!empty($tasksForm->search)) {
+                    $query->andWhere(['like', 'tasks.title', $tasksForm->search]);
+                }
             }
         }
 
@@ -57,10 +60,7 @@ class TasksController extends Controller
 
         return $this->render('index', [
             'tasks' => $tasks,
-            'tasksForm' => $tasksForm,
-            'categories' => Category::find()->select('name')->indexBy('id')->column(),
-            'select' => $this->select,
-            'date' => $this->date
+            'tasksForm' => $tasksForm
         ]);
     }
 }
