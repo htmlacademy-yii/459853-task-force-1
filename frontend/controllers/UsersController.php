@@ -5,6 +5,8 @@ namespace frontend\controllers;
 
 use yii\db\Query;
 use yii\web\Controller;
+use frontend\models\UsersForm;
+use Yii;
 
 class UsersController extends Controller
 {
@@ -32,9 +34,26 @@ class UsersController extends Controller
             ->where(['u.id' => $users_ids])
             ->groupBy('u.id');
 
+
+        $form = new UsersForm();
+
+        if (Yii::$app->request->getIsPost()) {
+            $formData = Yii::$app->request->post();
+            if ($form->load($formData) && $form->validate()) {
+                if ($form->categories) {
+                    $users_query->leftJoin('category_to_user ctu', 'ctu.user_id = u.id');
+                    $users_query->andWhere(['ctu.category_id' => $form->categories]);
+                }
+
+                if (!empty($form->search)) {
+                    $users_query->andWhere(['like', 'u.name', $form->search]);
+                }
+            }
+        }
+
         $users = $users_query->all();
 
 
-        return $this->render('index', ['users' => $users]);
+        return $this->render('index', ['users' => $users, 'usersForm' => $form]);
     }
 }

@@ -68,9 +68,9 @@ $this->title = 'Задания';
         <fieldset class="search-task__categories">
             <legend>Категории</legend>
             <?=
-                Html::activeCheckboxList($tasksForm, 'categories', Category::find()->select('name')->indexBy('id')->column(), ['item' => function ($index, $label, $name, $checked, $value) {
-                    return TemplateForm::getTemplateCheckbox($label, $value, $name, $checked);
-                }]);
+            Html::activeCheckboxList($tasksForm, 'categories', Category::find()->select('name')->indexBy('id')->column(), ['item' => function ($index, $label, $name, $checked, $value) {
+                return TemplateForm::getTemplateCheckbox($label, $value, $name, $checked);
+            }]);
             ?>
         </fieldset>
 
